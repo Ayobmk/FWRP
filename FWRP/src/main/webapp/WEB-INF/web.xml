@@ -5,7 +5,10 @@
  		http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" 
  		id="WebApp_ID" version="4.0">
 	<display-name>FWRP</display-name>
-  
+  	
+	<welcome-file-list>
+   		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
   
   	<error-page>
 		<exception-type>java.lang.Exception</exception-type>

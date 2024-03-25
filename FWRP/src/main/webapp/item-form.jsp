@@ -49,10 +49,21 @@
                         <input type="text" value="${item != null ? item.itemName : ''}" class="form-control" name="itemName" required="required">
                     </fieldset>
                     
-                    <fieldset class="form-group">
+                    <!-- <fieldset class="form-group">
                         <label>Item Type</label>
                         <input type="text" value="${item != null ? item.itemType : ''}" class="form-control" name="itemType" required="required">
+                    </fieldset> -->
+                    
+					<fieldset class="form-group">
+                    <label for="itemType"><i class="zmdi zmdi-nature-people"></i></label>Item Type<br>
+						<select name="itemType" id="type"  >
+							<option value="" disabled selected>Select your option</option>
+							<option value="Vegetables" ${item != null && item.itemType == 'Vegetables' ? 'selected' : ''}>Vegetables</option>
+						    <option value="Fruits" ${item != null && item.itemType == 'Fruits' ? 'selected' : ''}>Fruits</option>
+						    <option value="Drinks" ${item != null && item.itemType == 'Drinks' ? 'selected' : ''}>Drinks</option>
+						</select><br><br>
                     </fieldset>
+                    
                     
                     <fieldset class="form-group">
                         <label>Item Description</label>

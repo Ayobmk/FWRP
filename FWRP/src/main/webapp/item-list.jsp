@@ -1,6 +1,13 @@
+<%
+if(session.getAttribute("name")==null){
+	response.sendRedirect("login.jsp");
+}
+%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+   
+
 <html>
 <head>
 <title>Items Management Platform</title>
@@ -11,16 +18,15 @@
 </head>
 <body>
 	<header>
-		<nav class="navbar navbar-expand-md navbar-dark"
-		style="background-color: black">
-			<div>
-				<a href="###########" class="navbar-brand"> Item Management Platform</a>
-			</div>
-			
-			<ul class="navbar-nav">
-				<li><a href="<%=request.getContextPath()%>/list" class="nav-link"> Items</a></li>
-			</ul>
-		</nav>
+	<nav class="navbar navbar-expand-md navbar-dark" style="background-color: black">
+		<div> <a class="navbar-brand" href="#page-top">FOOD WASTE REDUCTION PLATFORM</a></div>
+		<ul class="navbar-nav">
+			<li class="nav-link"><a href="<%=request.getContextPath()%>/list">DASHBOARD</a></li>
+			<li class="nav-link"><a href="<%=request.getContextPath()%>/list">ACCOUNT STATUS</a></li>
+			<li class="nav-link"><a href="LogoutServlet">LOGOUT</a></li>
+			<li class="nav-link"><a href="LogoutServlet"><%=session.getAttribute("name") %></a></li>
+		</ul>
+	</nav>
 	</header>
 	<br>
 	<div class="row">
