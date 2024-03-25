@@ -44,6 +44,7 @@ if(session.getAttribute("name")==null){
                         <th>Item Name</th>
                         <th>Item Type</th>
                         <th>Item Description</th>
+                        <th>Reason</th>
                         <th>Expiration Date</th>
                         <th>Price</th>
                         <th>Actions</th>
@@ -56,6 +57,7 @@ if(session.getAttribute("name")==null){
                             <td><c:out value="${item.itemName}"/></td>
                             <td><c:out value="${item.itemType}"/></td>
                             <td><c:out value="${item.itemDescription}"/></td>
+                            <td><c:out value="${item.reason}"/></td>
                             <td><c:out value="${item.expDate}"/></td>
                             <td><c:out value="${item.price}"/></td>
                             <td>

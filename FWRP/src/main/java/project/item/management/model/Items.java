@@ -5,21 +5,23 @@ public class Items {
     private String itemName;
     private String itemType;
     private String itemDescription;
+    private String reason;
     private String expDate;
     private double price;
 
     // Constructors
-    public Items(int id, String itemName, String itemType, String itemDescription, String expDate, double price) {
+    public Items(int id, String itemName, String itemType, String itemDescription, String reason, String expDate, double price) {
         this.id = id;
         this.itemName = itemName;
         this.itemType = itemType;
         this.itemDescription = itemDescription;
+        this.reason = reason;
         this.expDate = expDate;
         this.price = price;
     }
     
-    public Items(String itemName, String itemType, String itemDescription, String expDate, double price) {
-        this(0, itemName, itemType, itemDescription, expDate, price); // Assuming ID is auto-generated or not needed for insertion.
+    public Items(String itemName, String itemType, String itemDescription, String reason, String expDate, double price) {
+        this(0, itemName, itemType, itemDescription, reason, expDate, price); // Assuming ID is auto-generated or not needed for insertion.
     }
 
     // Getters and Setters
@@ -53,6 +55,13 @@ public class Items {
 
     public void setItemDescription(String itemDescription) {
         this.itemDescription = itemDescription;
+    }
+    public String getReason() {
+    	return reason;
+    }
+    
+    public void setReason(String reason) {
+    	this.reason = reason;
     }
 
     public String getExpDate() {

@@ -20,11 +20,11 @@ public class ItemsDAO {
 	
 	
 	
-    private static final String INSERT_ITEMS_SQL = "INSERT INTO items (itemName, itemType, itemDescription, expDate, price) VALUES (?, ?, ?, ?, ?);";
-    private static final String SELECT_ITEM_BY_ID = "SELECT id, itemName, itemType, itemDescription, expDate, price FROM items WHERE id =?";
+    private static final String INSERT_ITEMS_SQL = "INSERT INTO items (itemName, itemType, itemDescription, reason, expDate, price) VALUES (?, ?, ?, ?, ?, ?);";
+    private static final String SELECT_ITEM_BY_ID = "SELECT id, itemName, itemType, itemDescription, reason, expDate, price FROM items WHERE id =?";
     private static final String SELECT_ALL_ITEMS = "SELECT * FROM items";
     private static final String DELETE_ITEMS_SQL = "DELETE FROM items WHERE id = ?;";
-    private static final String UPDATE_ITEMS_SQL = "UPDATE items SET itemName = ?, itemType = ?, itemDescription = ?, expDate = ?, price = ? WHERE id = ?;";
+    private static final String UPDATE_ITEMS_SQL = "UPDATE items SET itemName = ?, itemType = ?, itemDescription = ?, reason = ?, expDate = ?, price = ? WHERE id = ?;";
 
 	
 	protected Connection getConnection() {
@@ -47,8 +47,9 @@ public class ItemsDAO {
 					pst.setString(1, item.getItemName());
 					pst.setString(2, item.getItemType());
 					pst.setString(3, item.getItemDescription());
-					pst.setString(4, item.getExpDate());
-					pst.setDouble(5, item.getPrice());
+					pst.setString(4, item.getReason());
+					pst.setString(5, item.getExpDate());
+					pst.setDouble(6, item.getPrice());
 					
 					pst.executeUpdate();
 				}catch (Exception e) {
@@ -63,9 +64,10 @@ public class ItemsDAO {
 					pst.setString(1, item.getItemName());
 					pst.setString(2, item.getItemType());
 					pst.setString(3, item.getItemDescription());
-					pst.setString(4, item.getExpDate());
-					pst.setDouble(5, item.getPrice());
-					pst.setInt(6, item.getId());
+					pst.setString(4, item.getReason());
+					pst.setString(5, item.getExpDate());
+					pst.setDouble(6, item.getPrice());
+					pst.setInt(7, item.getId());
 					
 					int affectedRows = pst.executeUpdate();
 					System.out.println("Affected rows: " + affectedRows);
@@ -93,9 +95,10 @@ public class ItemsDAO {
                 String itemName = rs.getString("itemName");
                 String itemType = rs.getString("itemType");
                 String itemDescription = rs.getString("itemDescription");
+                String reason = rs.getString("reason");
                 String expDate = rs.getString("expDate");
                 double price = rs.getDouble("price");
-                item = new Items(id, itemName, itemType, itemDescription, expDate, price);
+                item = new Items(id, itemName, itemType, itemDescription, reason, expDate, price);
 			}
 
 		} catch (SQLException e) {
@@ -122,9 +125,10 @@ public class ItemsDAO {
                 String itemName = rs.getString("itemName");
                 String itemType = rs.getString("itemType");
                 String itemDescription = rs.getString("itemDescription");
+                String reason = rs.getString("reason");
                 String expDate = rs.getString("expDate");
                 double price = rs.getDouble("price");
-                items.add(new Items(id, itemName, itemType, itemDescription, expDate, price));
+                items.add(new Items(id, itemName, itemType, itemDescription, reason, expDate, price));
 				
 			}
 

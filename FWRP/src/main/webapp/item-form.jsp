@@ -61,7 +61,17 @@
 							<option value="Vegetables" ${item != null && item.itemType == 'Vegetables' ? 'selected' : ''}>Vegetables</option>
 						    <option value="Fruits" ${item != null && item.itemType == 'Fruits' ? 'selected' : ''}>Fruits</option>
 						    <option value="Drinks" ${item != null && item.itemType == 'Drinks' ? 'selected' : ''}>Drinks</option>
-						</select><br><br>
+						</select><br>
+                    </fieldset>
+                    
+                    
+					<fieldset class="form-group">
+                    <label for="reason"><i class="zmdi zmdi-nature-people"></i></label>Reason<br>
+						<select name="reason" id="type"  >
+							<option value="" disabled selected>Select your reason</option>
+							<option value="Sell" ${item != null && item.reason == 'Sell' ? 'selected' : ''}>Sell</option>
+						    <option value="Donation" ${item != null && item.reason == 'Donation' ? 'selected' : ''}>Donation</option>
+						</select><br>
                     </fieldset>
                     
                     
@@ -69,6 +79,12 @@
                         <label>Item Description</label>
                         <input type="text" value="${item != null ? item.itemDescription : ''}" class="form-control" name="itemDescription">
                     </fieldset>
+                    
+                    <fieldset class="form-group">
+                        <label>Reason</label>
+                        <input type="text" value="${item != null ? item.reason : ''}" class="form-control" name="reason">
+                    </fieldset>
+                    
                     
                     <fieldset class="form-group">
                         <label>Expiration Date</label>

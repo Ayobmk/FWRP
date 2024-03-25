@@ -103,9 +103,10 @@ public class ItemServlet extends HttpServlet {
         String itemName = request.getParameter("itemName");
         String itemType = request.getParameter("itemType");
         String itemDescription = request.getParameter("itemDescription");
+        String reason = request.getParameter("reason");
         String expDate = request.getParameter("expDate");
         double price = Double.parseDouble(request.getParameter("price"));
-        Items item = new Items(id, itemName, itemType, itemDescription, expDate, price);
+        Items item = new Items(id, itemName, itemType, itemDescription, reason, expDate, price);
         itemsDAO.updateItem(item);
         response.sendRedirect("list");
     }
@@ -145,9 +146,10 @@ public class ItemServlet extends HttpServlet {
         String itemName = request.getParameter("itemName");
         String itemType = request.getParameter("itemType");
         String itemDescription = request.getParameter("itemDescription");
+        String reason = request.getParameter("reason");
         String expDate = request.getParameter("expDate");
         double price = Double.parseDouble(request.getParameter("price"));
-        Items newItem = new Items(itemName, itemType, itemDescription, expDate, price);
+        Items newItem = new Items(itemName, itemType, itemDescription, reason, expDate, price);
         itemsDAO.insertItem(newItem);
         response.sendRedirect("list");
     }
