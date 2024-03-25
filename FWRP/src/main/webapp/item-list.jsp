@@ -14,7 +14,7 @@
 		<nav class="navbar navbar-expand-md navbar-dark"
 		style="background-color: black">
 			<div>
-				<a href="https://www.javaguides.net" class="navbar-brand"> Item Management Platform</a>
+				<a href="###########" class="navbar-brand"> Item Management Platform</a>
 			</div>
 			
 			<ul class="navbar-nav">

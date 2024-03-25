@@ -26,21 +26,17 @@
 	<div class="container col-md-5">
 		<div class="card">
 			<div class="card-body">
-				<c:if test="${items != null}">
+				<c:if test="${item != null}">
 					<form action="update" method="post">
 				</c:if>
-				<c:if test="${items == null}">
+				<c:if test="${item == null}">
 					<form action="insert" method="post">
 				</c:if>
 				
 				<caption>
 					<h2>
-						<c:if test="${items != null}">
-						Edit Item
-						</c:if>
-						<c:if test="${items == null}">
-						Add Item
-						</c:if>
+						<c:if test="${item != null}"> Edit Item </c:if>
+						<c:if test="${item == null}"> Add Item </c:if>
 					</h2>
 				</caption>
 				

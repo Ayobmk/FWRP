@@ -42,7 +42,7 @@ public class ItemServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
 		String action = request.getServletPath();
-	
+		
 		switch (action) {
 		case "/new":
 			showNewForm(request,response);
@@ -68,7 +68,7 @@ public class ItemServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 			break;
-		case "update":
+		case "/update":
 			try {
 				updateItem(request, response);
 			} catch (IOException | SQLException e) {

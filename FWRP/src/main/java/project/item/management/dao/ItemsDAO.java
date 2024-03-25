@@ -67,6 +67,9 @@ public class ItemsDAO {
 					pst.setDouble(5, item.getPrice());
 					pst.setInt(6, item.getId());
 					
+					int affectedRows = pst.executeUpdate();
+					System.out.println("Affected rows: " + affectedRows);
+
 					rowUpdated = pst.executeUpdate() >0;
 					
 				}
