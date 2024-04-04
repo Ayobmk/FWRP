@@ -2,6 +2,7 @@ package project.item.management.model;
 
 public class Items {
     private int id;
+    private byte[] image; 
     private String itemName;
     private String itemType;
     private String itemDescription;
@@ -10,18 +11,21 @@ public class Items {
     private double price;
 
     // Constructors
-    public Items(int id, String itemName, String itemType, String itemDescription, String reason, String expDate, double price) {
-        this.id = id;
-        this.itemName = itemName;
-        this.itemType = itemType;
-        this.itemDescription = itemDescription;
-        this.reason = reason;
-        this.expDate = expDate;
-        this.price = price;
-    }
-    
-    public Items(String itemName, String itemType, String itemDescription, String reason, String expDate, double price) {
-        this(0, itemName, itemType, itemDescription, reason, expDate, price); // Assuming ID is auto-generated or not needed for insertion.
+    public Items(int id, byte[] image, String itemName, String itemType, String itemDescription, String reason,
+			String expDate, double price) {
+		super();
+		this.id = id;
+		this.image = image;
+		this.itemName = itemName;
+		this.itemType = itemType;
+		this.itemDescription = itemDescription;
+		this.reason = reason;
+		this.expDate = expDate;
+		this.price = price;
+	}
+
+	public Items(byte[] image, String itemName, String itemType, String itemDescription, String reason, String expDate, double price) {
+        this(0,image, itemName, itemType, itemDescription, reason, expDate, price); // Assuming ID is auto-generated or not needed for insertion.
     }
 
     // Getters and Setters
@@ -33,7 +37,16 @@ public class Items {
         this.id = id;
     }
 
-    public String getItemName() {
+    
+    public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
+	}
+
+	public String getItemName() {
         return itemName;
     }
 

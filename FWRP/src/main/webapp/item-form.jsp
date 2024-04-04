@@ -27,10 +27,10 @@
 		<div class="card">
 			<div class="card-body">
 				<c:if test="${item != null}">
-					<form action="update" method="post">
+					<form action="update" method="post" enctype="multipart/form-data">
 				</c:if>
 				<c:if test="${item == null}">
-					<form action="insert" method="post">
+					<form action="insert" method="post" enctype="multipart/form-data">
 				</c:if>
 				
 				<caption>
@@ -43,11 +43,16 @@
                     <c:if test="${item != null}">
                         <input type="hidden" name="id" value="${item.id}" />
                     </c:if>
-                    
+                   					
                     <fieldset class="form-group">
                         <label>Item Name</label>
                         <input type="text" value="${item != null ? item.itemName : ''}" class="form-control" name="itemName" required="required">
                     </fieldset>
+                    
+                    <fieldset class="form-group">
+					    <label for="image">Image</label>
+					    <input type="file" id="image" name="image" class="form-control" accept="image/*">
+					</fieldset>
                     
                     <!-- <fieldset class="form-group">
                         <label>Item Type</label>

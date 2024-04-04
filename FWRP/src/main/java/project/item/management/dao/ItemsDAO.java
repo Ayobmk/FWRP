@@ -21,11 +21,12 @@ public class ItemsDAO {
 	
 	
 	
-    private static final String INSERT_ITEMS_SQL = "INSERT INTO items (itemName, itemType, itemDescription, reason, expDate, price) VALUES (?, ?, ?, ?, ?, ?);";
+    private static final String INSERT_ITEMS_SQL = "INSERT INTO items (image, itemName, itemType, itemDescription, reason, expDate, price) VALUES (?, ?, ?, ?, ?, ?, ?);";
     private static final String SELECT_ITEM_BY_ID = "SELECT id, itemName, itemType, itemDescription, reason, expDate, price FROM items WHERE id =?";
     private static final String SELECT_ALL_ITEMS = "SELECT * FROM items";
     private static final String DELETE_ITEMS_SQL = "DELETE FROM items WHERE id = ?;";
-    private static final String UPDATE_ITEMS_SQL = "UPDATE items SET itemName = ?, itemType = ?, itemDescription = ?, reason = ?, expDate = ?, price = ? WHERE id = ?;";
+    private static final String UPDATE_Not_Null_ITEMS_SQL = "UPDATE items SET image = ?, itemName = ?, itemType = ?, itemDescription = ?, reason = ?, expDate = ?, price = ? WHERE id = ?";
+    private static final String UPDATE_Null_ITEMS_SQL = "UPDATE items SET itemName = ?, itemType = ?, itemDescription = ?, reason = ?, expDate = ?, price = ? WHERE id = ?";
    // private static final String SELECT_ITEMS_EXPIRING_SOON = "SELECT * FROM items WHERE expDate <= ? AND expDate >= ?;";
     private static final String SELECT_ITEMS_EXPIRING_SOON = "SELECT * FROM items WHERE expDate <= ? AND expDate >= ?;";
 
@@ -47,12 +48,14 @@ public class ItemsDAO {
 	public void insertItem(Items item) throws SQLException {
 		try(Connection con = getConnection();
 				PreparedStatement pst = con.prepareStatement(INSERT_ITEMS_SQL)){
-					pst.setString(1, item.getItemName());
-					pst.setString(2, item.getItemType());
-					pst.setString(3, item.getItemDescription());
-					pst.setString(4, item.getReason());
-					pst.setString(5, item.getExpDate());
-					pst.setDouble(6, item.getPrice());
+			
+					pst.setBytes(1, item.getImage());
+					pst.setString(2, item.getItemName());
+					pst.setString(3, item.getItemType());
+					pst.setString(4, item.getItemDescription());
+					pst.setString(5, item.getReason());
+					pst.setString(6, item.getExpDate());
+					pst.setDouble(7, item.getPrice());
 					
 					pst.executeUpdate();
 				}catch (Exception e) {
@@ -62,8 +65,21 @@ public class ItemsDAO {
 	// Update Items 
 	public boolean updateItem(Items item) throws SQLException {
 		boolean rowUpdated;
+	    String sql = item.getImage() != null ? UPDATE_Not_Null_ITEMS_SQL : UPDATE_Null_ITEMS_SQL;
+
 		try(Connection con = getConnection();
-				PreparedStatement pst = con.prepareStatement(UPDATE_ITEMS_SQL)){
+				PreparedStatement pst = con.prepareStatement(sql)){
+					
+				if (item.getImage() != null) {
+					pst.setBytes(1, item.getImage());
+					pst.setString(2, item.getItemName());
+					pst.setString(3, item.getItemType());
+					pst.setString(4, item.getItemDescription());
+					pst.setString(5, item.getReason());
+					pst.setString(6, item.getExpDate());
+					pst.setDouble(7, item.getPrice());
+					pst.setInt(8, item.getId());
+				} else {
 					pst.setString(1, item.getItemName());
 					pst.setString(2, item.getItemType());
 					pst.setString(3, item.getItemDescription());
@@ -71,9 +87,7 @@ public class ItemsDAO {
 					pst.setString(5, item.getExpDate());
 					pst.setDouble(6, item.getPrice());
 					pst.setInt(7, item.getId());
-					
-					int affectedRows = pst.executeUpdate();
-					System.out.println("Affected rows: " + affectedRows);
+				}
 
 					rowUpdated = pst.executeUpdate() >0;
 					
@@ -95,13 +109,14 @@ public class ItemsDAO {
 			
 			//Process the ResultSet object
             while (rs.next()) {
+            	byte[] imageBytes = rs.getBytes("image");
                 String itemName = rs.getString("itemName");
                 String itemType = rs.getString("itemType");
                 String itemDescription = rs.getString("itemDescription");
                 String reason = rs.getString("reason");
                 String expDate = rs.getString("expDate");
                 double price = rs.getDouble("price");
-                item = new Items(id, itemName, itemType, itemDescription, reason, expDate, price);
+                item = new Items(id, imageBytes, itemName, itemType, itemDescription, reason, expDate, price);
 			}
 
 		} catch (SQLException e) {
@@ -125,13 +140,14 @@ public class ItemsDAO {
 			//Process the ResultSet object
             while (rs.next()) {
                 int id = rs.getInt("id");
+                byte[] imageBytes = rs.getBytes("image");
                 String itemName = rs.getString("itemName");
                 String itemType = rs.getString("itemType");
                 String itemDescription = rs.getString("itemDescription");
                 String reason = rs.getString("reason");
                 String expDate = rs.getString("expDate");
                 double price = rs.getDouble("price");
-                items.add(new Items(id, itemName, itemType, itemDescription, reason, expDate, price));
+                items.add(new Items(id, imageBytes, itemName, itemType, itemDescription, reason, expDate, price));
 				
 			}
 
@@ -191,15 +207,18 @@ public class ItemsDAO {
             pst.setDate(1, java.sql.Date.valueOf(endDate));
             pst.setDate(2, java.sql.Date.valueOf(startDate));
             ResultSet resultSet = pst.executeQuery();
+            
+            
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
+                byte[] imageBytes = resultSet.getBytes("image");
                 String itemName = resultSet.getString("itemName");
                 String itemType = resultSet.getString("itemType");
                 String itemDescription = resultSet.getString("itemDescription");
                 String reason = resultSet.getString("reason");
                 String expDate = resultSet.getString("expDate");
                 double price = resultSet.getDouble("price");
-                Items item = new Items(id, itemName, itemType, itemDescription, reason, expDate, price);
+                Items item = new Items(id, imageBytes, itemName, itemType, itemDescription, reason, expDate, price);
                 itemsList.add(item);
             }
         }

@@ -1,16 +1,20 @@
 package project.item.management.web;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import project.item.management.dao.ItemsDAO;
 import project.item.management.model.Items;
@@ -19,6 +23,7 @@ import project.item.management.model.Items;
  * Servlet implementation class ItemServlet
  */
 @WebServlet("/")
+@MultipartConfig
 public class ItemServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ItemsDAO itemsDAO;
@@ -97,6 +102,8 @@ public class ItemServlet extends HttpServlet {
 	private void listItems(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException{
 		List<Items> listItems = itemsDAO.selectAllItem();
+		
+		System.out.println("Number of items: " + listItems.size()); // Debugging statement
 		request.setAttribute("listItems", listItems);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("item-list.jsp");
 		dispatcher.forward(request, response);
@@ -124,18 +131,42 @@ public class ItemServlet extends HttpServlet {
 
 	//Method to handle update Method Request
     private void updateItem(HttpServletRequest request, HttpServletResponse response) 
-            throws SQLException, IOException {
+            throws SQLException, IOException, ServletException {
         int id = Integer.parseInt(request.getParameter("id"));
+        
+     // Initialize variables to hold the form data.
+        byte[] imageBytes = null;
+        Part filePart = request.getPart("image");
+        
+        // Check if a new file has been uploaded.
+        if (filePart != null && filePart.getSize() > 0) {
+            // Process the uploaded file part and get the imageBytes.
+            try (InputStream fileContent = filePart.getInputStream(); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+                byte[] buffer = new byte[1024];
+                int read;
+                while ((read = fileContent.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, read);
+                }
+                imageBytes = outputStream.toByteArray();
+            } 
+        }
+
         String itemName = request.getParameter("itemName");
         String itemType = request.getParameter("itemType");
         String itemDescription = request.getParameter("itemDescription");
         String reason = request.getParameter("reason");
         String expDate = request.getParameter("expDate");
         double price = Double.parseDouble(request.getParameter("price"));
-        Items item = new Items(id, itemName, itemType, itemDescription, reason, expDate, price);
-        itemsDAO.updateItem(item);
-        response.sendRedirect("list");
-    }
+        Items item = new Items(id, imageBytes, itemName, itemType, itemDescription, reason, expDate, price);
+        try {
+            // Update the item in the database. This method needs to properly handle the case where imageBytes is null.
+            itemsDAO.updateItem(item);
+
+            // Redirect or forward after successful update.
+            response.sendRedirect("list"); // Adjust as needed.
+        } catch (SQLException e) {
+            throw new ServletException("Database error while updating the item.", e);
+        }    }
 
 	
 	//Method to handle delete Method Request
@@ -167,18 +198,36 @@ public class ItemServlet extends HttpServlet {
 	}
 	
 	//Method to handle Insert Method request
-    private void insertItem(HttpServletRequest request, HttpServletResponse response) 
-            throws SQLException, IOException {
-        String itemName = request.getParameter("itemName");
-        String itemType = request.getParameter("itemType");
-        String itemDescription = request.getParameter("itemDescription");
-        String reason = request.getParameter("reason");
-        String expDate = request.getParameter("expDate");
-        double price = Double.parseDouble(request.getParameter("price"));
-        Items newItem = new Items(itemName, itemType, itemDescription, reason, expDate, price);
-        itemsDAO.insertItem(newItem);
-        response.sendRedirect("list");
-    }
+	protected void insertItem(HttpServletRequest request, HttpServletResponse response) 
+	        throws SQLException, IOException, ServletException { // Already declared to throw ServletException and IOException
+	    Part filePart = request.getPart("image"); // This can throw IOException or ServletException which are already handled
+	    byte[] imageBytes = null;
+	    
+	    if (filePart != null) {
+	        try (InputStream fileContent = filePart.getInputStream(); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+	            byte[] buffer = new byte[1024];
+	            int read;
+	            while ((read = fileContent.read(buffer)) != -1) {
+	                outputStream.write(buffer, 0, read);
+	            }
+	            imageBytes = outputStream.toByteArray(); // Correctly obtain the byte array here
+	        } // No need for a catch here as you're throwing the exceptions. Resource management is handled by try-with-resources.
+	    }
+
+	    // Get the rest of the form data
+	    String itemName = request.getParameter("itemName");
+	    String itemType = request.getParameter("itemType");
+	    String itemDescription = request.getParameter("itemDescription");
+	    String reason = request.getParameter("reason");
+	    String expDate = request.getParameter("expDate");
+	    double price = Double.parseDouble(request.getParameter("price"));
+
+	    // Create a new item object
+	    Items newItem = new Items(imageBytes, itemName, itemType, itemDescription, reason, expDate, price);
+	    itemsDAO.insertItem(newItem); // Insert the new item
+	    response.sendRedirect("list"); // Redirect after insertion
+	}
+
 
 
 }

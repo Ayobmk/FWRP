@@ -41,6 +41,7 @@ if(session.getAttribute("name")==null){
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Image</th>
                         <th>Item Name</th>
                         <th>Item Type</th>
                         <th>Item Description</th>
@@ -54,6 +55,7 @@ if(session.getAttribute("name")==null){
                     <c:forEach var="item" items="${listItems}">
                         <tr>
                             <td><c:out value="${item.id}"/></td>
+                            <td><c:out value="${item.image}"/></td>
                             <td><c:out value="${item.itemName}"/></td>
                             <td><c:out value="${item.itemType}"/></td>
                             <td><c:out value="${item.itemDescription}"/></td>
