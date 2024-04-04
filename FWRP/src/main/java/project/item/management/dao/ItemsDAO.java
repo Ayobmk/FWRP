@@ -22,7 +22,7 @@ public class ItemsDAO {
 	
 	
     private static final String INSERT_ITEMS_SQL = "INSERT INTO items (image, itemName, itemType, itemDescription, reason, expDate, price) VALUES (?, ?, ?, ?, ?, ?, ?);";
-    private static final String SELECT_ITEM_BY_ID = "SELECT id, itemName, itemType, itemDescription, reason, expDate, price FROM items WHERE id =?";
+    private static final String SELECT_ITEM_BY_ID = "SELECT id, image, itemName, itemType, itemDescription, reason, expDate, price FROM items WHERE id =?";
     private static final String SELECT_ALL_ITEMS = "SELECT * FROM items";
     private static final String DELETE_ITEMS_SQL = "DELETE FROM items WHERE id = ?;";
     private static final String UPDATE_Not_Null_ITEMS_SQL = "UPDATE items SET image = ?, itemName = ?, itemType = ?, itemDescription = ?, reason = ?, expDate = ?, price = ? WHERE id = ?";

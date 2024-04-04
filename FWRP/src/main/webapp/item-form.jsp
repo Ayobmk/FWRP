@@ -92,6 +92,7 @@
                         <label>Price</label>
                         <input type="text" value="${item != null ? item.price : ''}" class="form-control" name="price" required="required">
                     </fieldset>
+
 				
 				<button type="submit" class="btn btn-success">Save</button>
 				</form>

@@ -9,6 +9,8 @@ public class Items {
     private String reason;
     private String expDate;
     private double price;
+//    private boolean surplus;
+
 
     // Constructors
     public Items(int id, byte[] image, String itemName, String itemType, String itemDescription, String reason,
@@ -22,6 +24,7 @@ public class Items {
 		this.reason = reason;
 		this.expDate = expDate;
 		this.price = price;
+
 	}
 
 	public Items(byte[] image, String itemName, String itemType, String itemDescription, String reason, String expDate, double price) {
@@ -92,4 +95,14 @@ public class Items {
     public void setPrice(double price) {
         this.price = price;
     }
+
+//	public boolean isSurplus() {
+//		return surplus;
+//	}
+//
+//	public void setSurplus(boolean surplus) {
+//		this.surplus = surplus;
+//	}
+//    
+    
 }
