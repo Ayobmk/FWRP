@@ -5,7 +5,7 @@ if(session.getAttribute("name")==null){
 %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-   <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
    
 
 <html>
@@ -19,7 +19,7 @@ if(session.getAttribute("name")==null){
 <body>
 	<header>
 	<nav class="navbar navbar-expand-md navbar-dark" style="background-color: black">
-		<div> <a class="navbar-brand" href="#page-top">FOOD WASTE REDUCTION PLATFORM</a></div>
+		<div> <a class="navbar-brand" href="index.jsp">FOOD WASTE REDUCTION PLATFORM</a></div>
 		<ul class="navbar-nav">
 			<li class="nav-link"><a href="<%=request.getContextPath()%>/list">DASHBOARD</a></li>
 			<li class="nav-link"><a href="<%=request.getContextPath()%>/list">ACCOUNT STATUS</a></li>
@@ -69,6 +69,8 @@ if(session.getAttribute("name")==null){
                     </c:forEach>
                 </tbody>
             </table>
+            
+           
 		</div>
 	</div>
 </body>

@@ -2,6 +2,7 @@ package project.item.management.web;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -75,6 +76,13 @@ public class ItemServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 			break;
+        case "/expiringSoon":
+            try {
+            	listItemsExpiringSoon(request, response);
+			} catch (SQLException | ServletException | IOException e) {
+				e.printStackTrace();
+			}
+            break;
 		default:
 			try {
 				listItems(request,response);
@@ -92,6 +100,24 @@ public class ItemServlet extends HttpServlet {
 		request.setAttribute("listItems", listItems);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("item-list.jsp");
 		dispatcher.forward(request, response);
+	}
+
+	//listItemsExpiringSoon
+//    private void listItemsExpiringSoon(HttpServletRequest request, HttpServletResponse response)
+//            throws SQLException, ServletException, IOException {
+//        List<Items> listItemsExpiringSoon = itemsDAO.selectItemsExpiringSoon();
+//        request.setAttribute("listItemsExpiringSoon", listItemsExpiringSoon);
+//        RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+//        dispatcher.forward(request, response);
+//    }
+	void listItemsExpiringSoon(HttpServletRequest request, HttpServletResponse response)
+	        throws SQLException, ServletException, IOException {
+	    LocalDate today = LocalDate.now();
+	    LocalDate sevenDaysFromNow = today.plusDays(7);
+	    List<Items> listItemsExpiringSoon = itemsDAO.fetchItemsExpiringSoon(today, sevenDaysFromNow);
+	    request.setAttribute("listItemsExpiringSoon", listItemsExpiringSoon);
+	    RequestDispatcher dispatcher = request.getRequestDispatcher("customer.jsp");
+	    dispatcher.forward(request, response);
 	}
 
 
