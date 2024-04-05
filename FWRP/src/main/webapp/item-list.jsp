@@ -87,6 +87,57 @@ if(session.getAttribute("name")==null){
             
            
 		</div>
+		<div class="container">
+			<h3 class="text-center">List of Orders</h3>
+			<hr>
+			<div class="container text-left">
+				<a href="<%=request.getContextPath()%>/new" class="btn tbn-success" style="background-color: green">Add New Item</a>
+			</div>
+			<br>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Item Name</th>
+                        <th>Item Type</th>
+                        <th>Item Description</th>
+                        <th>Reason</th>
+                        <th>Expiration Date</th>
+                        <th>Price</th>
+                        <th>Discounted Price</th>
+                        <th>User Name</th>
+                        <th>User Email</th>
+                        <th>User Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+		            <c:forEach var="order" items="${listItemsOrders}">
+		                <tr>
+		                    <td>${order.id}</td>
+		                    <td>
+		                        <c:if test="${order.image != null}">
+		                            <img src="data:image/png;base64,${Base64.getEncoder().encodeToString(order.image)}" height="100" alt="Item Image"/>
+		                        </c:if>
+		                    </td>
+		                    <td>${order.itemName}</td>
+		                    <td>${order.itemType}</td>
+		                    <td>${order.itemDescription}</td>
+		                    <td>${order.reason}</td>
+		                    <td>${order.expDate}</td>
+		                    <td>${order.price}</td>
+		                    <td>${order.discountedPrice}</td>
+		                    <td>${order.userName}</td>
+		                    <td>${order.userEmail}</td>
+		                    <td>${order.userType}</td>
+		                </tr>
+		            </c:forEach>
+                </tbody>
+            </table>
+            
+           
+		</div>
+		
 	</div>
 </body>
 </html>
