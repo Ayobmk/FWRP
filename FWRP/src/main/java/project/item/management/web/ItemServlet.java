@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,7 +20,8 @@ import javax.servlet.http.Part;
 
 import project.item.management.dao.ItemsDAO;
 import project.item.management.model.Items;
-
+import project.item.management.model.DefaultItemCalculationStrategy;
+import project.item.management.model.ItemCalculationStrategy;
 /**
  * Servlet implementation class ItemServlet
  */
@@ -27,12 +30,15 @@ import project.item.management.model.Items;
 public class ItemServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ItemsDAO itemsDAO;
+    private ItemCalculationStrategy calculationStrategy;
+
 
     /**
      * @see HttpServlet#HttpServlet()
      */
     public ItemServlet() {
     	this.itemsDAO = new ItemsDAO();
+        this.calculationStrategy = new DefaultItemCalculationStrategy();
     }
 
 	/**
@@ -102,9 +108,14 @@ public class ItemServlet extends HttpServlet {
 	private void listItems(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException{
 		List<Items> listItems = itemsDAO.selectAllItem();
-		
+		Map<Integer, Double> discountedPrices = new HashMap<>();
+        for (Items item : listItems) {
+            double discountedPrice = calculationStrategy.calculateDiscountedPrice(item); // Calculate the discounted price
+            discountedPrices.put(item.getId(), discountedPrice); // Associate the item ID with its discounted price
+        }
 		System.out.println("Number of items: " + listItems.size()); // Debugging statement
 		request.setAttribute("listItems", listItems);
+		request.setAttribute("discountedPrices", discountedPrices);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("item-list.jsp");
 		dispatcher.forward(request, response);
 	}

@@ -6,7 +6,7 @@ if(session.getAttribute("name")==null){
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-   
+
 
 <html>
 <head>
@@ -48,6 +48,7 @@ if(session.getAttribute("name")==null){
                         <th>Reason</th>
                         <th>Expiration Date</th>
                         <th>Price</th>
+                        <th>Discounted Price</th>
                         <th>Surplus</th>
                         <th>Actions</th>
                     </tr>
@@ -63,6 +64,16 @@ if(session.getAttribute("name")==null){
                             <td><c:out value="${item.reason}"/></td>
                             <td><c:out value="${item.expDate}"/></td>
                             <td><c:out value="${item.price}"/></td>
+			                <td>
+				                <c:choose>
+				                    <c:when test="${discountedPrices[item.id] ne -1}">
+				                        <c:out value="${discountedPrices[item.id]}"/>
+				                    </c:when>
+				                    <c:otherwise>
+				                        N/A
+				                    </c:otherwise>
+				                </c:choose>	
+             		      	</td>                            
                             <td><c:out value="${item.surplus ? 'Yes' : 'No'}"/></td> <!-- Displaying Surplus status -->
                             <td>
                                 <a href="edit?id=<c:out value='${item.id}'/>">Edit</a>

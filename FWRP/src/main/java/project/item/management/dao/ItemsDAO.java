@@ -174,36 +174,6 @@ public class ItemsDAO {
 	}
 	
 	//selectItemsExpiringSoon
-//    public List<Items> selectItemsExpiringSoon() {
-//        List<Items> itemsExpiringSoon = new ArrayList<>();
-//        LocalDate today = LocalDate.now();
-//        LocalDate sevenDaysFromNow = today.plusDays(7);
-//        
-//        try (Connection connection = getConnection();
-//             PreparedStatement pst = connection.prepareStatement(SELECT_ITEMS_EXPIRING_SOON)) {
-//           // pst.setString(1, sevenDaysFromNow.toString());
-//           // pst.setString(2, today.toString());
-//           // ResultSet rs = pst.executeQuery();
-//        	pst.setDate(1, java.sql.Date.valueOf(today));
-//            pst.setDate(2, java.sql.Date.valueOf(sevenDaysFromNow));
-//            ResultSet rs = pst.executeQuery();
-//            System.out.println("Items fetched: " + itemsExpiringSoon.size());
-//            while (rs.next()) {
-//                int id = rs.getInt("id");
-//                String itemName = rs.getString("itemName");
-//                String itemType = rs.getString("itemType");
-//                String itemDescription = rs.getString("itemDescription");
-//                String reason = rs.getString("reason");
-//                String expDate = rs.getString("expDate");
-//                double price = rs.getDouble("price");
-//                
-//                itemsExpiringSoon.add(new Items(id, itemName, itemType, itemDescription, reason, expDate, price));
-//            }
-//        } catch (SQLException e) {
-//        	e.printStackTrace();
-//        }
-//        return itemsExpiringSoon;
-//    }
 	
 	public List<Items> fetchItemsExpiringSoon(LocalDate startDate, LocalDate endDate) throws SQLException {
 	    List<Items> itemsList = new ArrayList<>();
