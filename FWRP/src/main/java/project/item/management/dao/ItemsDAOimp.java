@@ -280,6 +280,7 @@ public class ItemsDAOimp implements ItemsDAO{
                         success = true;
                     }
                 }
+                
             }
 
             if (success) {
@@ -338,7 +339,8 @@ public class ItemsDAOimp implements ItemsDAO{
                 order.setUserEmail(rs.getString("User_Email"));
                 order.setUserType(rs.getString("User_Type"));
                 orders.add(order);
-            }
+            } 
+            
         }
         return orders;
     }

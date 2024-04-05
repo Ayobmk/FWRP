@@ -20,6 +20,7 @@ import javax.servlet.http.Part;
 
 import project.item.management.dao.ItemsDAOimp;
 import project.item.management.model.Items;
+import project.item.management.model.Order;
 import project.item.management.model.DefaultItemCalculationStrategy;
 import project.item.management.model.ItemCalculationStrategy;
 /**
@@ -108,6 +109,8 @@ public class ItemServlet extends HttpServlet {
 	private void listItems(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException{
 		List<Items> listItems = itemsDAO.selectAllItem();
+	    List<Order> orders  = itemsDAO.fetchAllOrders();
+
 		Map<Integer, Double> discountedPrices = new HashMap<>();
         for (Items item : listItems) {
             double discountedPrice = calculationStrategy.calculateDiscountedPrice(item); // Calculate the discounted price
@@ -116,6 +119,7 @@ public class ItemServlet extends HttpServlet {
 		System.out.println("Number of items: " + listItems.size()); // Debugging statement
 		request.setAttribute("listItems", listItems);
 		request.setAttribute("discountedPrices", discountedPrices);
+	    request.setAttribute("listItemsOrders", orders);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("item-list.jsp");
 		dispatcher.forward(request, response);
 	}
