@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import project.item.management.model.Order;
+
 import project.item.management.model.DefaultItemCalculationStrategy;
 //import project.item.management.model.ItemCalculationStrategy;
 import project.item.management.model.Items;
@@ -314,4 +316,30 @@ public class ItemsDAOimp implements ItemsDAO{
         return success;
     }
     
+    @Override
+    public List<Order> fetchAllOrders() throws SQLException {
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM itemsOrders";
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Order order = new Order();
+                order.setId(rs.getInt("id"));
+                order.setImage(rs.getBytes("image"));
+                order.setItemName(rs.getString("itemName"));
+                order.setItemType(rs.getString("itemType"));
+                order.setItemDescription(rs.getString("itemDescription"));
+                order.setReason(rs.getString("reason"));
+                order.setExpDate(rs.getString("expDate"));
+                order.setPrice(rs.getDouble("price"));
+                order.setDiscountedPrice(rs.getDouble("Discounted_Price"));
+                order.setUserName(rs.getString("User_Name"));
+                order.setUserEmail(rs.getString("User_Email"));
+                order.setUserType(rs.getString("User_Type"));
+                orders.add(order);
+            }
+        }
+        return orders;
+    }
 }
