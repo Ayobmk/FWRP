@@ -9,12 +9,12 @@ public class Items {
     private String reason;
     private String expDate;
     private double price;
-//    private boolean surplus;
+    private boolean surplus;
 
 
     // Constructors
     public Items(int id, byte[] image, String itemName, String itemType, String itemDescription, String reason,
-			String expDate, double price) {
+			String expDate, double price, boolean surplus) {
 		super();
 		this.id = id;
 		this.image = image;
@@ -24,11 +24,12 @@ public class Items {
 		this.reason = reason;
 		this.expDate = expDate;
 		this.price = price;
+		this.surplus = surplus;
 
 	}
 
-	public Items(byte[] image, String itemName, String itemType, String itemDescription, String reason, String expDate, double price) {
-        this(0,image, itemName, itemType, itemDescription, reason, expDate, price); // Assuming ID is auto-generated or not needed for insertion.
+	public Items(byte[] image, String itemName, String itemType, String itemDescription, String reason, String expDate, double price, boolean surplus) {
+        this(0,image, itemName, itemType, itemDescription, reason, expDate, price, surplus); 
     }
 
     // Getters and Setters
@@ -96,13 +97,13 @@ public class Items {
         this.price = price;
     }
 
-//	public boolean isSurplus() {
-//		return surplus;
-//	}
-//
-//	public void setSurplus(boolean surplus) {
-//		this.surplus = surplus;
-//	}
-//    
+	public boolean isSurplus() {
+		return surplus;
+	}
+
+	public void setSurplus(boolean surplus) {
+		this.surplus = surplus;
+	}
+    
     
 }

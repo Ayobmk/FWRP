@@ -48,6 +48,7 @@ if(session.getAttribute("name")==null){
                         <th>Reason</th>
                         <th>Expiration Date</th>
                         <th>Price</th>
+                        <th>Surplus</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -62,6 +63,7 @@ if(session.getAttribute("name")==null){
                             <td><c:out value="${item.reason}"/></td>
                             <td><c:out value="${item.expDate}"/></td>
                             <td><c:out value="${item.price}"/></td>
+                            <td><c:out value="${item.surplus ? 'Yes' : 'No'}"/></td> <!-- Displaying Surplus status -->
                             <td>
                                 <a href="edit?id=<c:out value='${item.id}'/>">Edit</a>
                                 &nbsp;&nbsp;&nbsp;&nbsp;

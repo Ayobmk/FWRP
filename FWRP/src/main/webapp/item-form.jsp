@@ -93,6 +93,11 @@
                         <input type="text" value="${item != null ? item.price : ''}" class="form-control" name="price" required="required">
                     </fieldset>
 
+					<fieldset class="form-group">
+					    <label>
+					        <input type="checkbox" name="surplus" ${item != null && item.surplus ? 'checked' : ''}> Surplus
+					    </label>
+					</fieldset>
 				
 				<button type="submit" class="btn btn-success">Save</button>
 				</form>

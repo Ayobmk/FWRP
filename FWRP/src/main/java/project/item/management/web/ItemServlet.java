@@ -157,7 +157,9 @@ public class ItemServlet extends HttpServlet {
         String reason = request.getParameter("reason");
         String expDate = request.getParameter("expDate");
         double price = Double.parseDouble(request.getParameter("price"));
-        Items item = new Items(id, imageBytes, itemName, itemType, itemDescription, reason, expDate, price);
+        boolean surplus = request.getParameter("surplus") != null && request.getParameter("surplus").equals("on");
+
+        Items item = new Items(id, imageBytes, itemName, itemType, itemDescription, reason, expDate, price, surplus);
         try {
             // Update the item in the database. This method needs to properly handle the case where imageBytes is null.
             itemsDAO.updateItem(item);
@@ -221,9 +223,10 @@ public class ItemServlet extends HttpServlet {
 	    String reason = request.getParameter("reason");
 	    String expDate = request.getParameter("expDate");
 	    double price = Double.parseDouble(request.getParameter("price"));
+	    boolean surplus = request.getParameter("surplus") != null && request.getParameter("surplus").equals("on");
 
 	    // Create a new item object
-	    Items newItem = new Items(imageBytes, itemName, itemType, itemDescription, reason, expDate, price);
+	    Items newItem = new Items(imageBytes, itemName, itemType, itemDescription, reason, expDate, price, surplus);
 	    itemsDAO.insertItem(newItem); // Insert the new item
 	    response.sendRedirect("list"); // Redirect after insertion
 	}

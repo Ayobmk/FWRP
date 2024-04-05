@@ -21,12 +21,12 @@ public class ItemsDAO {
 	
 	
 	
-    private static final String INSERT_ITEMS_SQL = "INSERT INTO items (image, itemName, itemType, itemDescription, reason, expDate, price) VALUES (?, ?, ?, ?, ?, ?, ?);";
-    private static final String SELECT_ITEM_BY_ID = "SELECT id, image, itemName, itemType, itemDescription, reason, expDate, price FROM items WHERE id =?";
+    private static final String INSERT_ITEMS_SQL = "INSERT INTO items (image, itemName, itemType, itemDescription, reason, expDate, price, surplus) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+    private static final String SELECT_ITEM_BY_ID = "SELECT id, image, itemName, itemType, itemDescription, reason, expDate, price, surplus FROM items WHERE id =?";
     private static final String SELECT_ALL_ITEMS = "SELECT * FROM items";
     private static final String DELETE_ITEMS_SQL = "DELETE FROM items WHERE id = ?;";
-    private static final String UPDATE_Not_Null_ITEMS_SQL = "UPDATE items SET image = ?, itemName = ?, itemType = ?, itemDescription = ?, reason = ?, expDate = ?, price = ? WHERE id = ?";
-    private static final String UPDATE_Null_ITEMS_SQL = "UPDATE items SET itemName = ?, itemType = ?, itemDescription = ?, reason = ?, expDate = ?, price = ? WHERE id = ?";
+    private static final String UPDATE_Not_Null_ITEMS_SQL = "UPDATE items SET image = ?, itemName = ?, itemType = ?, itemDescription = ?, reason = ?, expDate = ?, price = ?, surplus = ? WHERE id = ?";
+    private static final String UPDATE_Null_ITEMS_SQL = "UPDATE items SET itemName = ?, itemType = ?, itemDescription = ?, reason = ?, expDate = ?, price = ?, surplus = ? WHERE id = ?";
    // private static final String SELECT_ITEMS_EXPIRING_SOON = "SELECT * FROM items WHERE expDate <= ? AND expDate >= ?;";
     private static final String SELECT_ITEMS_EXPIRING_SOON = "SELECT * FROM items WHERE expDate <= ? AND expDate >= ?;";
 
@@ -56,6 +56,7 @@ public class ItemsDAO {
 					pst.setString(5, item.getReason());
 					pst.setString(6, item.getExpDate());
 					pst.setDouble(7, item.getPrice());
+					pst.setBoolean(8, item.isSurplus());
 					
 					pst.executeUpdate();
 				}catch (Exception e) {
@@ -78,7 +79,8 @@ public class ItemsDAO {
 					pst.setString(5, item.getReason());
 					pst.setString(6, item.getExpDate());
 					pst.setDouble(7, item.getPrice());
-					pst.setInt(8, item.getId());
+					pst.setBoolean(8, item.isSurplus());
+					pst.setInt(9, item.getId());
 				} else {
 					pst.setString(1, item.getItemName());
 					pst.setString(2, item.getItemType());
@@ -86,7 +88,8 @@ public class ItemsDAO {
 					pst.setString(4, item.getReason());
 					pst.setString(5, item.getExpDate());
 					pst.setDouble(6, item.getPrice());
-					pst.setInt(7, item.getId());
+					pst.setBoolean(7, item.isSurplus());
+					pst.setInt(8, item.getId());
 				}
 
 					rowUpdated = pst.executeUpdate() >0;
@@ -116,7 +119,8 @@ public class ItemsDAO {
                 String reason = rs.getString("reason");
                 String expDate = rs.getString("expDate");
                 double price = rs.getDouble("price");
-                item = new Items(id, imageBytes, itemName, itemType, itemDescription, reason, expDate, price);
+                boolean surplus = rs.getBoolean("surplus");
+                item = new Items(id, imageBytes, itemName, itemType, itemDescription, reason, expDate, price, surplus);
 			}
 
 		} catch (SQLException e) {
@@ -147,7 +151,8 @@ public class ItemsDAO {
                 String reason = rs.getString("reason");
                 String expDate = rs.getString("expDate");
                 double price = rs.getDouble("price");
-                items.add(new Items(id, imageBytes, itemName, itemType, itemDescription, reason, expDate, price));
+                boolean surplus = rs.getBoolean("surplus");
+                items.add(new Items(id, imageBytes, itemName, itemType, itemDescription, reason, expDate, price, surplus));
 				
 			}
 
@@ -200,29 +205,31 @@ public class ItemsDAO {
 //        return itemsExpiringSoon;
 //    }
 	
-    public List<Items> fetchItemsExpiringSoon(LocalDate startDate, LocalDate endDate) throws SQLException {
-        List<Items> itemsList = new ArrayList<>();
-        try (Connection connection = getConnection();
-             PreparedStatement pst = connection.prepareStatement(SELECT_ITEMS_EXPIRING_SOON)) {
-            pst.setDate(1, java.sql.Date.valueOf(endDate));
-            pst.setDate(2, java.sql.Date.valueOf(startDate));
-            ResultSet resultSet = pst.executeQuery();
-            
-            
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                byte[] imageBytes = resultSet.getBytes("image");
-                String itemName = resultSet.getString("itemName");
-                String itemType = resultSet.getString("itemType");
-                String itemDescription = resultSet.getString("itemDescription");
-                String reason = resultSet.getString("reason");
-                String expDate = resultSet.getString("expDate");
-                double price = resultSet.getDouble("price");
-                Items item = new Items(id, imageBytes, itemName, itemType, itemDescription, reason, expDate, price);
-                itemsList.add(item);
-            }
-        }
-        return itemsList;
-    }
+	public List<Items> fetchItemsExpiringSoon(LocalDate startDate, LocalDate endDate) throws SQLException {
+	    List<Items> itemsList = new ArrayList<>();
+	    try (Connection connection = getConnection();
+	         PreparedStatement pst = connection.prepareStatement(SELECT_ITEMS_EXPIRING_SOON)) {
+	        pst.setDate(1, java.sql.Date.valueOf(endDate));
+	        pst.setDate(2, java.sql.Date.valueOf(startDate));
+	        ResultSet resultSet = pst.executeQuery();
+
+	        while (resultSet.next()) {
+	            int id = resultSet.getInt("id");
+	            byte[] imageBytes = resultSet.getBytes("image");
+	            String itemName = resultSet.getString("itemName");
+	            String itemType = resultSet.getString("itemType");
+	            String itemDescription = resultSet.getString("itemDescription");
+	            String reason = resultSet.getString("reason");
+	            String expDate = resultSet.getString("expDate");
+	            double price = resultSet.getDouble("price");
+	            boolean surplus = resultSet.getBoolean("surplus");
+	            
+	            // Include surplus in constructor
+	            Items item = new Items(id, imageBytes, itemName, itemType, itemDescription, reason, expDate, price, surplus);
+	            itemsList.add(item);
+	        }
+	    }
+	    return itemsList;
+	}
     
 }
