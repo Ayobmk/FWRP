@@ -8,13 +8,16 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import project.item.management.model.DefaultItemCalculationStrategy;
+//import project.item.management.model.ItemCalculationStrategy;
 import project.item.management.model.Items;
 //import project.mysql.cj.xdevapi.Statement;
 
 
 //this DAO class provides CRUD database operations for the table items in the database
-public class ItemsDAO {
+public class ItemsDAOimp implements ItemsDAO{
 	private String jdbcURL = "jdbc:mysql://localhost:3306/fwrp?useSSL=false";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "9448";
@@ -28,7 +31,8 @@ public class ItemsDAO {
     private static final String UPDATE_Not_Null_ITEMS_SQL = "UPDATE items SET image = ?, itemName = ?, itemType = ?, itemDescription = ?, reason = ?, expDate = ?, price = ?, surplus = ? WHERE id = ?";
     private static final String UPDATE_Null_ITEMS_SQL = "UPDATE items SET itemName = ?, itemType = ?, itemDescription = ?, reason = ?, expDate = ?, price = ?, surplus = ? WHERE id = ?";
    // private static final String SELECT_ITEMS_EXPIRING_SOON = "SELECT * FROM items WHERE expDate <= ? AND expDate >= ?;";
-    private static final String SELECT_ITEMS_EXPIRING_SOON = "SELECT * FROM items WHERE expDate <= ? AND expDate >= ? AND reason = 'Sell';";
+   // private static final String SELECT_ITEMS_EXPIRING_SOON = "SELECT * FROM items WHERE expDate <= ? AND expDate >= ? AND reason = 'Sell';";
+    private DefaultItemCalculationStrategy calculationStrategy = new DefaultItemCalculationStrategy();
 
 	
 	protected Connection getConnection() {
@@ -175,31 +179,42 @@ public class ItemsDAO {
 	
 	//selectItemsExpiringSoon
 	
-	public List<Items> fetchItemsExpiringSoon(LocalDate startDate, LocalDate endDate) throws SQLException {
-	    List<Items> itemsList = new ArrayList<>();
-	    try (Connection connection = getConnection();
-	         PreparedStatement pst = connection.prepareStatement(SELECT_ITEMS_EXPIRING_SOON)) {
-	        pst.setDate(1, java.sql.Date.valueOf(endDate));
-	        pst.setDate(2, java.sql.Date.valueOf(startDate));
-	        ResultSet resultSet = pst.executeQuery();
+//	public List<Items> fetchItemsExpiringSoon(LocalDate startDate, LocalDate endDate) throws SQLException {
+//	    List<Items> itemsList = new ArrayList<>();
+//	    try (Connection connection = getConnection();
+//	         PreparedStatement pst = connection.prepareStatement(SELECT_ITEMS_EXPIRING_SOON)) {
+//	        pst.setDate(1, java.sql.Date.valueOf(endDate));
+//	        pst.setDate(2, java.sql.Date.valueOf(startDate));
+//	        ResultSet resultSet = pst.executeQuery();
+//
+//	        while (resultSet.next()) {
+//	            int id = resultSet.getInt("id");
+//	            byte[] imageBytes = resultSet.getBytes("image");
+//	            String itemName = resultSet.getString("itemName");
+//	            String itemType = resultSet.getString("itemType");
+//	            String itemDescription = resultSet.getString("itemDescription");
+//	            String reason = resultSet.getString("reason");
+//	            String expDate = resultSet.getString("expDate");
+//	            double price = resultSet.getDouble("price");
+//	            boolean surplus = resultSet.getBoolean("surplus");
+//	            
+//	            // Include surplus in constructor
+//	            Items item = new Items(id, imageBytes, itemName, itemType, itemDescription, reason, expDate, price, surplus);
+//	            itemsList.add(item);
+//	        }
+//	    }
+//	    return itemsList;
+//	}
 
-	        while (resultSet.next()) {
-	            int id = resultSet.getInt("id");
-	            byte[] imageBytes = resultSet.getBytes("image");
-	            String itemName = resultSet.getString("itemName");
-	            String itemType = resultSet.getString("itemType");
-	            String itemDescription = resultSet.getString("itemDescription");
-	            String reason = resultSet.getString("reason");
-	            String expDate = resultSet.getString("expDate");
-	            double price = resultSet.getDouble("price");
-	            boolean surplus = resultSet.getBoolean("surplus");
-	            
-	            // Include surplus in constructor
-	            Items item = new Items(id, imageBytes, itemName, itemType, itemDescription, reason, expDate, price, surplus);
-	            itemsList.add(item);
-	        }
-	    }
-	    return itemsList;
-	}
+    @Override
+    public List<Items> fetchItemsExpiringSoon(LocalDate startDate, LocalDate endDate) throws SQLException {
+        List<Items> allItems = selectAllItem(); // Fetch all items
+
+        // Filter items based on the isItemNearToExpire logic
+        return allItems.stream()
+                       .filter(item -> calculationStrategy.isItemNearToExpire(item)&& "Sell".equals(item.getReason()))
+                       .collect(Collectors.toList());
+    }
+
     
 }

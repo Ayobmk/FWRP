@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-import project.item.management.dao.ItemsDAO;
+import project.item.management.dao.ItemsDAOimp;
 import project.item.management.model.Items;
 import project.item.management.model.DefaultItemCalculationStrategy;
 import project.item.management.model.ItemCalculationStrategy;
@@ -29,7 +29,7 @@ import project.item.management.model.ItemCalculationStrategy;
 @MultipartConfig
 public class ItemServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private ItemsDAO itemsDAO;
+	private ItemsDAOimp itemsDAO;
     private ItemCalculationStrategy calculationStrategy;
 
 
@@ -37,7 +37,7 @@ public class ItemServlet extends HttpServlet {
      * @see HttpServlet#HttpServlet()
      */
     public ItemServlet() {
-    	this.itemsDAO = new ItemsDAO();
+    	this.itemsDAO = new ItemsDAOimp();
         this.calculationStrategy = new DefaultItemCalculationStrategy();
     }
 

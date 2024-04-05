@@ -1,7 +1,7 @@
 package project.item.management.model;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+//import java.time.LocalDate;
+//import java.time.format.DateTimeFormatter;
 
 public class Items {
     private int id;
@@ -108,8 +108,7 @@ public class Items {
 		this.surplus = surplus;
 	}
     
-    public boolean isNearExpiry() {
-        LocalDate expirationDate = LocalDate.parse(this.expDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        return expirationDate.isBefore(LocalDate.now().plusDays(8));
-    }
+//    public LocalDate getExpDateAsLocalDate() {
+//        return LocalDate.parse(expDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//    }
 }
