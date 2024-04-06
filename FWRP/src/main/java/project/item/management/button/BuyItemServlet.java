@@ -22,11 +22,11 @@ public class BuyItemServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int itemId = Integer.parseInt(request.getParameter("itemId"));
         HttpSession session = request.getSession();
-        String buyerName = (String) session.getAttribute("userName"); // Assuming you store user name in session
-        String buyerEmail = (String) session.getAttribute("userEmail"); // Assuming you store user email in session
-        String userType = (String) session.getAttribute("userType"); // Assuming you store user type in session
+        String buyerName = (String) session.getAttribute("userName"); 
+        String buyerEmail = (String) session.getAttribute("name"); 
+        String userType = (String) session.getAttribute("userType"); 
         
-        // Retrieve the map of discounted prices from where it's stored (e.g., servlet context, session)
+        // Retrieve the map of discounted prices from where it's stored 
         Map<Integer, Double> discountedPrices = (Map<Integer, Double>) session.getAttribute("discountedPrices");
         double discountedPrice = discountedPrices.getOrDefault(itemId, 0.0); // Get the discounted price for the item, default to 0.0 if not found
         

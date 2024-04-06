@@ -50,6 +50,26 @@ public class ItemsDAOimp implements ItemsDAO{
 		return con;
 	}
 	
+	//Implement the registerUser method
+	@Override
+	public boolean registerUser(String userName, String userEmail, String userPassword, String userPhone, String userType, String userProvince) throws SQLException {
+	    boolean result = false;
+	    String sql = "INSERT INTO Users (User_Name, User_Email, User_Password, User_Phone, User_Type, User_Province) VALUES (?, ?, ?, ?, ?, ?)";
+	    try (Connection connection = getConnection();
+	         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+	        preparedStatement.setString(1, userName);
+	        preparedStatement.setString(2, userEmail);
+	        preparedStatement.setString(3, userPassword);
+	        preparedStatement.setString(4, userPhone);
+	        preparedStatement.setString(5, userType);
+	        preparedStatement.setString(6, userProvince);
+	        
+	        int rowsAffected = preparedStatement.executeUpdate();
+	        result = rowsAffected > 0;
+	    }
+	    return result;
+	}
+	
 	// Create or insert Items 
 	public void insertItem(Items item) throws SQLException {
 		try(Connection con = getConnection();
@@ -179,34 +199,6 @@ public class ItemsDAOimp implements ItemsDAO{
 		} return rowDeleted;
 	}
 	
-	//selectItemsExpiringSoon
-	
-//	public List<Items> fetchItemsExpiringSoon(LocalDate startDate, LocalDate endDate) throws SQLException {
-//	    List<Items> itemsList = new ArrayList<>();
-//	    try (Connection connection = getConnection();
-//	         PreparedStatement pst = connection.prepareStatement(SELECT_ITEMS_EXPIRING_SOON)) {
-//	        pst.setDate(1, java.sql.Date.valueOf(endDate));
-//	        pst.setDate(2, java.sql.Date.valueOf(startDate));
-//	        ResultSet resultSet = pst.executeQuery();
-//
-//	        while (resultSet.next()) {
-//	            int id = resultSet.getInt("id");
-//	            byte[] imageBytes = resultSet.getBytes("image");
-//	            String itemName = resultSet.getString("itemName");
-//	            String itemType = resultSet.getString("itemType");
-//	            String itemDescription = resultSet.getString("itemDescription");
-//	            String reason = resultSet.getString("reason");
-//	            String expDate = resultSet.getString("expDate");
-//	            double price = resultSet.getDouble("price");
-//	            boolean surplus = resultSet.getBoolean("surplus");
-//	            
-//	            // Include surplus in constructor
-//	            Items item = new Items(id, imageBytes, itemName, itemType, itemDescription, reason, expDate, price, surplus);
-//	            itemsList.add(item);
-//	        }
-//	    }
-//	    return itemsList;
-//	}
 
     @Override
     public List<Items> fetchItemsExpiringSoon(LocalDate startDate, LocalDate endDate) throws SQLException {
@@ -224,6 +216,7 @@ public class ItemsDAOimp implements ItemsDAO{
         Connection connection = null;
         PreparedStatement fetchStatement = null;
         PreparedStatement insertStatement = null;
+        PreparedStatement insertStatementCustomer = null;
         PreparedStatement deleteStatement = null;
 
         try {
@@ -261,6 +254,22 @@ public class ItemsDAOimp implements ItemsDAO{
                 insertStatement.setString(10, userEmail);
                 insertStatement.setString(11, userType);                
                 insertStatement.executeUpdate();
+                
+                // Insert into itemsOrdersCustomer
+                String insertSqlCustomer = "INSERT INTO itemsOrdersCustomer (image, itemName, itemType, itemDescription, reason, expDate, price, Discounted_Price, User_Name, User_Email, User_Type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                insertStatementCustomer = connection.prepareStatement(insertSqlCustomer);
+                insertStatementCustomer.setBytes(1, image);
+                insertStatementCustomer.setString(2, itemName);
+                insertStatementCustomer.setString(3, itemType);
+                insertStatementCustomer.setString(4, itemDescription);
+                insertStatementCustomer.setString(5, reason);
+                insertStatementCustomer.setString(6, expDate);
+                insertStatementCustomer.setDouble(7, price); // Original price
+                insertStatementCustomer.setDouble(8, discountedPrice); // Discounted price
+                insertStatementCustomer.setString(9, userName);
+                insertStatementCustomer.setString(10, userEmail);
+                insertStatementCustomer.setString(11, userType);                
+                insertStatementCustomer.executeUpdate();
 
                 // Delete from items
                 String deleteSql = "DELETE FROM items WHERE id = ?";
@@ -283,6 +292,7 @@ public class ItemsDAOimp implements ItemsDAO{
         } finally {
             if (fetchStatement != null) fetchStatement.close();
             if (insertStatement != null) insertStatement.close();
+            if (insertStatementCustomer != null) insertStatement.close();
             if (deleteStatement != null) deleteStatement.close();
             if (connection != null) {
                 connection.setAutoCommit(true); // Reset auto-commit
@@ -416,6 +426,37 @@ public class ItemsDAOimp implements ItemsDAO{
                 orders.add(order);
             } 
             
+        }
+        return orders;
+    }
+    
+    @Override
+    public List<Order> fetchOrdersByUserEmail(String userEmail) throws SQLException {
+        List<Order> orders = new ArrayList<>();
+        String sql = "SELECT * FROM itemsOrdersCustomer WHERE User_Email = ?";
+
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, userEmail);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Order order = new Order();
+                // Assuming you have a constructor or setters to set these
+                order.setId(rs.getInt("id"));
+                order.setImage(rs.getBytes("image"));
+                order.setItemName(rs.getString("itemName"));
+                order.setItemType(rs.getString("itemType"));
+                order.setItemDescription(rs.getString("itemDescription"));
+                order.setReason(rs.getString("reason"));
+                order.setExpDate(rs.getString("expDate"));
+                order.setPrice(rs.getDouble("price"));
+                order.setDiscountedPrice(rs.getDouble("Discounted_Price"));
+                order.setUserName(rs.getString("User_Name"));
+                order.setUserEmail(rs.getString("User_Email"));
+                order.setUserType(rs.getString("User_Type"));
+                orders.add(order);
+            }
         }
         return orders;
     }

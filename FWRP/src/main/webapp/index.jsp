@@ -31,9 +31,9 @@ if(session.getAttribute("name")==null){
         %>
             <li class="nav-link"><a href="<%=request.getContextPath()%>/list">DASHBOARD</a></li>
         <% } else if("Customer".equals(userType)) { %>
-            <li class="nav-link"><a href="<%=request.getContextPath()%>/customer">CUSTOMER STATUS</a></li>
+            <li class="nav-link"><a href="<%=request.getContextPath()%>/customerStatus">CUSTOMER STATUS</a></li>
         <% } else if("Charity".equals(userType)) { %>
-            <li class="nav-link"><a href="<%=request.getContextPath()%>/charity">CHARITY STATUS</a></li>
+            <li class="nav-link"><a href="<%=request.getContextPath()%>/customerStatus">CHARITY STATUS</a></li>
         <% } %>
 			<li class="nav-link"><a href="LogoutServlet">LOGOUT</a></li>
 			<li class="nav-link"><a href="LogoutServlet"><%=session.getAttribute("name") %></a></li>

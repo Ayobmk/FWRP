@@ -14,13 +14,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import project.item.management.dao.DAOFactory;
+import project.item.management.dao.ItemsDAO;
+
 /**
  * Servlet implementation class RegistrationServlet
  */
 @WebServlet("/RegistrationServlet")
 public class RegistrationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    private ItemsDAO itemsDAO;
+
+    
+    public void init() {
+        itemsDAO = DAOFactory.getItemsDAO();
+    }
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String User_Name = request.getParameter("name");
 		String User_Email = request.getParameter("email");
@@ -89,35 +97,26 @@ public class RegistrationServlet extends HttpServlet {
 					dispatcher.forward(request, response);
 				}
 
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/fwrp?useSSL=false","root","9448");
-			PreparedStatement pst = con.prepareStatement("INSERT INTO Users(User_Name,User_Email,User_Password,User_Phone,User_Type,User_Province) VALUES(?,?,?,?,?,?) ");
-			pst.setString(1, User_Name);
-			pst.setString(2, User_Email);
-			pst.setString(3, User_Password);
-			pst.setString(4, User_Phone);
-			pst.setString(5, User_Type);
-			pst.setString(6, User_Province);
-			
-			int rowCount = pst.executeUpdate();
-			dispatcher = request.getRequestDispatcher("registration.jsp");
-			
-			if( rowCount > 0) {
-				request.setAttribute("status", "success");
-				
-			}else {
-				request.setAttribute("status", "failed");
-			}
-			dispatcher.forward(request, response);
-		} catch (Exception e) {
-			e.printStackTrace();
+		        try {
+		            boolean isRegistered = itemsDAO.registerUser(User_Name, User_Email, User_Password, User_Phone, User_Type, User_Province);
+		            if (isRegistered) {
+		                request.setAttribute("status", "success");
+		            } else {
+		                request.setAttribute("status", "failed");
+		            }
+		            dispatcher = request.getRequestDispatcher("registration.jsp");
+		            dispatcher.forward(request, response);
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+
 		}finally {
-			try {
-				con.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		    if (con != null) {
+		        try {
+		            con.close();
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+		        }
+		    }
 		}
 	}
 
