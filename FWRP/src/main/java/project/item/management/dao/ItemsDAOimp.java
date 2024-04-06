@@ -218,6 +218,81 @@ public class ItemsDAOimp implements ItemsDAO{
                        .collect(Collectors.toList());
     }
 
+    @Override
+    public boolean buyItem(int itemId, String userName, String userEmail, String userType, double discountedPrice) throws SQLException {
+        boolean success = false;
+        Connection connection = null;
+        PreparedStatement fetchStatement = null;
+        PreparedStatement insertStatement = null;
+        PreparedStatement deleteStatement = null;
+
+        try {
+            connection = getConnection();
+            connection.setAutoCommit(false); // Start transaction
+
+            // Fetch the item details
+            String fetchSql = "SELECT * FROM items WHERE id = ?";
+            fetchStatement = connection.prepareStatement(fetchSql);
+            fetchStatement.setInt(1, itemId);
+            ResultSet rs = fetchStatement.executeQuery();
+
+            if (rs.next()) {
+                // Extract item details
+                byte[] image = rs.getBytes("image");
+                String itemName = rs.getString("itemName");
+                String itemType = rs.getString("itemType");
+                String itemDescription = rs.getString("itemDescription");
+                String reason = rs.getString("reason");
+                String expDate = rs.getString("expDate");
+                double price = rs.getDouble("price");
+
+                // Insert into itemsOrders
+                String insertSql = "INSERT INTO itemsOrders (image, itemName, itemType, itemDescription, reason, expDate, price, Discounted_Price, User_Name, User_Email, User_Type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                insertStatement = connection.prepareStatement(insertSql);
+                insertStatement.setBytes(1, image);
+                insertStatement.setString(2, itemName);
+                insertStatement.setString(3, itemType);
+                insertStatement.setString(4, itemDescription);
+                insertStatement.setString(5, reason);
+                insertStatement.setString(6, expDate);
+                insertStatement.setDouble(7, price); // Original price
+                insertStatement.setDouble(8, discountedPrice); // Discounted price
+                insertStatement.setString(9, userName);
+                insertStatement.setString(10, userEmail);
+                insertStatement.setString(11, userType);                
+                insertStatement.executeUpdate();
+
+                // Delete from items
+                String deleteSql = "DELETE FROM items WHERE id = ?";
+                deleteStatement = connection.prepareStatement(deleteSql);
+                deleteStatement.setInt(1, itemId);
+                deleteStatement.executeUpdate();
+
+                connection.commit(); // Commit transaction
+                success = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            if (connection != null) {
+                try {
+                    connection.rollback(); // Rollback on error
+                } catch (SQLException e2) {
+                    e2.printStackTrace();
+                }
+            }
+        } finally {
+            if (fetchStatement != null) fetchStatement.close();
+            if (insertStatement != null) insertStatement.close();
+            if (deleteStatement != null) deleteStatement.close();
+            if (connection != null) {
+                connection.setAutoCommit(true); // Reset auto-commit
+                connection.close();
+            }
+        }
+
+        return success;
+    }
+
     
     @Override
     public boolean claimItem(int itemId, String userName, String userEmail, String userType) {

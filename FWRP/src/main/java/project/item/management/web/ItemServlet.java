@@ -138,6 +138,8 @@ public class ItemServlet extends HttpServlet {
 	    request.setAttribute("listItemsOrders", orders);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("item-list.jsp");
 		dispatcher.forward(request, response);
+		request.getSession().setAttribute("discountedPrices", discountedPrices);
+
 	}
 
 	//listItemsExpiringSoon

@@ -61,7 +61,8 @@ if(session.getAttribute("name")==null){
 					            <c:if test="${not empty item.base64Image}">
 					                <img src="data:image/png;base64,${item.base64Image}" alt="Item Image" height="100"/>
 					            </c:if>
-					        </td>                            <td><c:out value="${item.itemName}"/></td>
+					        </td>                            
+					        <td><c:out value="${item.itemName}"/></td>
                             <td><c:out value="${item.itemType}"/></td>
                             <td><c:out value="${item.itemDescription}"/></td>
                             <td><c:out value="${item.reason}"/></td>
@@ -125,7 +126,16 @@ if(session.getAttribute("name")==null){
 		                    <td>${order.reason}</td>
 		                    <td>${order.expDate}</td>
 		                    <td>${order.price}</td>
-		                    <td>${order.discountedPrice}</td>
+							<td>
+							    <c:choose>
+							        <c:when test="${order.discountedPrice == -1}">
+							            N/A
+							        </c:when>
+							        <c:otherwise>
+							            ${order.discountedPrice}
+							        </c:otherwise>
+							    </c:choose>
+							</td>
 		                    <td>${order.userName}</td>
 		                    <td>${order.userType}</td>
 		                </tr>
