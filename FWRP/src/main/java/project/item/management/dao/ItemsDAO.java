@@ -17,4 +17,6 @@ public interface ItemsDAO {
     boolean claimItem(int itemId, String userName, String userEmail, String userType);
     public List<Order> fetchAllOrders() throws SQLException;
     public boolean buyItem(int itemId, String userName, String userEmail, String userType, double discountedPrice) throws SQLException ;
+    boolean subscribeUser(String userName, String userEmail, String userType, String userProvince, String foodPref) throws SQLException;
+
 }

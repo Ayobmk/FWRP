@@ -419,4 +419,23 @@ public class ItemsDAOimp implements ItemsDAO{
         }
         return orders;
     }
+    
+    @Override
+    public boolean subscribeUser(String userName, String userEmail, String userType, String foodPref, String userProvince) throws SQLException {
+        try (Connection connection = getConnection();
+             PreparedStatement pst = connection.prepareStatement("INSERT INTO Subscriber (User_Name, User_Email, User_Type, Food_Pref, User_Province) VALUES (?, ?, ?, ?, ?)")) {
+        	pst.setString(1, userName);
+        	pst.setString(2, userEmail);
+        	pst.setString(3, userType);
+        	pst.setString(4, foodPref);
+            pst.setString(5, userProvince);
+
+            int result = pst.executeUpdate();
+            return result > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
 }
