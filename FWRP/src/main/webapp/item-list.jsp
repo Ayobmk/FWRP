@@ -57,8 +57,12 @@ if(session.getAttribute("name")==null){
                     <c:forEach var="item" items="${listItems}">
                         <tr>
                             <td><c:out value="${item.id}"/></td>
-                            <td><c:out value="${item.image}"/></td>
-                            <td><c:out value="${item.itemName}"/></td>
+					        <td>
+					            <c:if test="${not empty item.base64Image}">
+					                <img src="data:image/png;base64,${item.base64Image}" alt="Item Image" height="100"/>
+					            </c:if>
+					        </td>                            
+					        <td><c:out value="${item.itemName}"/></td>
                             <td><c:out value="${item.itemType}"/></td>
                             <td><c:out value="${item.itemDescription}"/></td>
                             <td><c:out value="${item.reason}"/></td>
@@ -87,6 +91,61 @@ if(session.getAttribute("name")==null){
             
            
 		</div>
+		<div class="container">
+			<h3 class="text-center">Current Orders</h3>
+			<hr>
+			<br>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Item Name</th>
+                        <th>Item Type</th>
+                        <th>Item Description</th>
+                        <th>Reason</th>
+                        <th>Expiration Date</th>
+                        <th>Price</th>
+                        <th>Discounted Price</th>
+                        <th>User Mail</th>
+                        <th>User Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+		            <c:forEach var="order" items="${listItemsOrders}">
+		                <tr>
+		                    <td>${order.id}</td>
+		                    <td>
+		                        <c:if test="${order.image != null}">
+		                            <img src="data:image/png;base64,${order.base64Image}" height="100" alt="Item Image"/>
+		                        </c:if>
+		                    </td>
+		                    <td>${order.itemName}</td>
+		                    <td>${order.itemType}</td>
+		                    <td>${order.itemDescription}</td>
+		                    <td>${order.reason}</td>
+		                    <td>${order.expDate}</td>
+		                    <td>${order.price}</td>
+							<td>
+							    <c:choose>
+							        <c:when test="${order.discountedPrice == -1}">
+							            N/A
+							        </c:when>
+							        <c:otherwise>
+							            ${order.discountedPrice}
+							        </c:otherwise>
+							    </c:choose>
+							</td>
+		                    <td>${order.userName}</td>
+		                    <td>${order.userType}</td>
+		                </tr>
+		            </c:forEach>
+                </tbody>
+            </table>
+            
+           
+		</div>
+		
 	</div>
 </body>
 </html>

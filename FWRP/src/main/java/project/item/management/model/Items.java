@@ -13,7 +13,7 @@ public class Items {
     private String expDate;
     private double price;
     private boolean surplus;
-
+    private String base64Image;
 
     // Constructors
     public Items(int id, byte[] image, String itemName, String itemType, String itemDescription, String reason,
@@ -107,7 +107,16 @@ public class Items {
 	public void setSurplus(boolean surplus) {
 		this.surplus = surplus;
 	}
+
+	public String getBase64Image() {
+		return base64Image;
+	}
+
+	public void setBase64Image(String base64Image) {
+		this.base64Image = base64Image;
+	}
     
+	
 //    public LocalDate getExpDateAsLocalDate() {
 //        return LocalDate.parse(expDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 //    }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import javax.servlet.http.Part;
 
 import project.item.management.dao.ItemsDAOimp;
 import project.item.management.model.Items;
+import project.item.management.model.Order;
 import project.item.management.model.DefaultItemCalculationStrategy;
 import project.item.management.model.ItemCalculationStrategy;
 /**
@@ -108,6 +110,23 @@ public class ItemServlet extends HttpServlet {
 	private void listItems(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, ServletException, IOException{
 		List<Items> listItems = itemsDAO.selectAllItem();
+	    List<Order> orders  = itemsDAO.fetchAllOrders();
+
+	    // Convert each order's image from byte array to Base64 string
+	    for (Items item : listItems) {
+	        if (item.getImage() != null) {
+	            String base64Image = Base64.getEncoder().encodeToString(item.getImage());
+	            item.setBase64Image(base64Image); // Assuming you have a setBase64Image method in Items
+	        }
+	    }
+
+	    for (Order order : orders) {
+	        if (order.getImage() != null) {
+	            String base64Image = Base64.getEncoder().encodeToString(order.getImage());
+	            order.setBase64Image(base64Image);
+	        }
+	    }
+	    
 		Map<Integer, Double> discountedPrices = new HashMap<>();
         for (Items item : listItems) {
             double discountedPrice = calculationStrategy.calculateDiscountedPrice(item); // Calculate the discounted price
@@ -116,8 +135,11 @@ public class ItemServlet extends HttpServlet {
 		System.out.println("Number of items: " + listItems.size()); // Debugging statement
 		request.setAttribute("listItems", listItems);
 		request.setAttribute("discountedPrices", discountedPrices);
+	    request.setAttribute("listItemsOrders", orders);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("item-list.jsp");
 		dispatcher.forward(request, response);
+		request.getSession().setAttribute("discountedPrices", discountedPrices);
+
 	}
 
 	//listItemsExpiringSoon
