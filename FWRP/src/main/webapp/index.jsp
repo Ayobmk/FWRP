@@ -31,9 +31,9 @@ if(session.getAttribute("name")==null){
         %>
             <li class="nav-link"><a href="<%=request.getContextPath()%>/list">DASHBOARD</a></li>
         <% } else if("Customer".equals(userType)) { %>
-            <li class="nav-link"><a href="<%=request.getContextPath()%>/customer">CUSTOMER STATUS</a></li>
+            <li class="nav-link"><a href="<%=request.getContextPath()%>/customerStatus">CUSTOMER STATUS</a></li>
         <% } else if("Charity".equals(userType)) { %>
-            <li class="nav-link"><a href="<%=request.getContextPath()%>/charity">CHARITY STATUS</a></li>
+            <li class="nav-link"><a href="<%=request.getContextPath()%>/customerStatus">CHARITY STATUS</a></li>
         <% } %>
 			<li class="nav-link"><a href="LogoutServlet">LOGOUT</a></li>
 			<li class="nav-link"><a href="LogoutServlet"><%=session.getAttribute("name") %></a></li>
@@ -66,10 +66,31 @@ if(session.getAttribute("name")==null){
             <li class="Shop-link"><a href="<%=request.getContextPath()%>/customer">CUSTOMER</a></li>
         <% } else if("Charity".equals(SHOP)) { %>
             <li class="nav-link"><a href="<%=request.getContextPath()%>/charity">CHARITY STATUS</a></li>
-        <% } %>	
-        
-        
+        <% } %>	                
      </ul>
+	<br>
+	<br>
+	<div class="containerTitleProduct">
+		<h2 class="title2">Subscribe now</h2>
+	</div>
+	<br>
+
+	<div>
+		<form action="SubscribeServlet" method="POST">
+		    <input type="hidden" name="userEmail" value="${sessionScope.name}"/> 
+		    <select name="foodPref">
+		        <option value="Drinks">Drinks</option>
+		        <option value="Vegetables">Vegetables</option>
+		        <option value="Fruits">Fruits</option>
+		    </select>
+		    <input type="hidden" name="userProvince" value="${sessionScope.userProvince}"/> 
+		    <button type="submit">Subscribe</button>
+		</form>
+	</div>
 
 </body>
 </html>
+<% if(session.getAttribute("subscriptionMessage") != null) { %>
+    <script>alert('<%= session.getAttribute("subscriptionMessage") %>');</script>
+    <% session.removeAttribute("subscriptionMessage"); %>
+<% } %>

@@ -22,7 +22,6 @@ if(session.getAttribute("name")==null){
 		<div> <a class="navbar-brand" href="index.jsp">FOOD WASTE REDUCTION PLATFORM</a></div>
 		<ul class="navbar-nav">
 			<li class="nav-link"><a href="<%=request.getContextPath()%>/list">DASHBOARD</a></li>
-			<li class="nav-link"><a href="<%=request.getContextPath()%>/list">ACCOUNT STATUS</a></li>
 			<li class="nav-link"><a href="LogoutServlet">LOGOUT</a></li>
 			<li class="nav-link"><a href="LogoutServlet"><%=session.getAttribute("name") %></a></li>
 		</ul>
