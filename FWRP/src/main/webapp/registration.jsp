@@ -124,34 +124,34 @@
 
 	var status = document.getElementById("status").value;
 	if(status == "success"){
-		swal("Congrats","Account Created Successfully","success");
+		swal("Oops","Account Created Successfully","success");
 	}
 	if(status == "invalidName"){
-		swal("Congrats","Please Enter Your Name","error");
+		swal("Oops","Please Enter Your Name","error");
 	}
 	if(status == "invalidEmail"){
-		swal("Congrats","Please Enter Your Email","error");
+		swal("Oops","Please Enter Your Email","error");
 	}
 	if(status == "invalidPassword"){
-		swal("Congrats","Please Enter Your Password","error");
+		swal("Oops","Please Enter Your Password","error");
 	}
 	if(status == "invalidComfirmPassword"){
-		swal("Congrats","Please Confirm Your Password","error");
+		swal("Oops","Please Confirm Your Password","error");
 	}
 	if(status == "invalidMatchPassword"){
-		swal("Congrats","Password Do Not Match","error");
+		swal("Oops","Password Do Not Match","error");
 	}
 	if(status == "invalidPhoneNumber"){
-		swal("Congrats","Please Enter Your Phone Number","error");
+		swal("Oops","Please Enter Your Phone Number","error");
 	}
 	if(status == "invalidPhoneNumberLenght"){
-		swal("Congrats","Please Enter 10 Digits","error");
+		swal("Oops","Please Enter 10 Digits","error");
 	}
 	if(status == "invalidType"){
-		swal("Congrats","Please Choose Your Type","error");
+		swal("Oops","Please Choose Your Type","error");
 	}
 	if(status == "invalidProvince"){
-		swal("Congrats","Please Choose Your Province","error");
+		swal("Oops","Please Choose Your Province","error");
 	}
 </script>
 
