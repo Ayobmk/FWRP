@@ -51,13 +51,19 @@ if(session.getAttribute("name")==null){
 		</ul>
 	</nav>
 	<section class="page-section-products" id="products">
-		<div class="containerTitleProduct">
-			<h2 class="title2">Items Expiring Soon</h2>
+		<div class="notification-msg">    
+			<c:if test="${not empty notifications}">
+			    <div class="alert alert-info">
+			        <ul>
+			            <c:forEach items="${notifications}" var="notification">
+			                <li>${notification}</li>
+			            </c:forEach>
+			        </ul>
+			    </div>
+			</c:if>			
 		</div>
 		
-
-		
-		<h2 class="title2">Surplus Items</h2>
+		<h2 class="title2">Your Orders</h2>
 		<table border="1">
 		    <tr>
 		        <th>ID</th>
