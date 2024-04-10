@@ -88,6 +88,31 @@ public class ItemsDAOimp implements ItemsDAO{
 				}catch (Exception e) {
 					e.printStackTrace();
 				}
+	    // Check for subscribers with matching Food_Pref and generate notifications
+	    String checkPrefSql = "SELECT User_Email FROM Subscriber WHERE Food_Pref = ?";
+	    try (Connection con = getConnection();
+	         PreparedStatement checkPrefStmt = con.prepareStatement(checkPrefSql)) {
+	        checkPrefStmt.setString(1, item.getItemType());
+	        ResultSet rs = checkPrefStmt.executeQuery();
+	        
+	        while (rs.next()) {
+	            String userEmail = rs.getString("User_Email");
+	            // Assume a method exists to insert notifications
+	            insertNotificationForUser(userEmail, "New item available that matches your preference: " + item.getItemName());
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+
+	private void insertNotificationForUser(String userEmail, String message) throws SQLException {
+	    String insertNotifSql = "INSERT INTO Notifications (user_email, message, seen) VALUES (?, ?, false)";
+	    try (Connection con = getConnection();
+	         PreparedStatement insertNotifStmt = con.prepareStatement(insertNotifSql)) {
+	        insertNotifStmt.setString(1, userEmail);
+	        insertNotifStmt.setString(2, message);
+	        insertNotifStmt.executeUpdate();
+	    }
 	}
 	// Update Items 
 	public boolean updateItem(Items item) throws SQLException {
@@ -123,6 +148,8 @@ public class ItemsDAOimp implements ItemsDAO{
 				}
 		return rowUpdated;
 	}
+	
+	
 	// Select Item by id
 	public Items selectItem(int id) {
 		Items item = null;
@@ -476,6 +503,29 @@ public class ItemsDAOimp implements ItemsDAO{
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;
+        }
+    }
+
+    public List<String> fetchNotificationsForUser(String userEmail) throws SQLException {
+        List<String> notifications = new ArrayList<>();
+        String fetchNotifSql = "SELECT message FROM Notifications WHERE user_email = ? AND seen = 0";
+        try (Connection con = getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(fetchNotifSql)) {
+            preparedStatement.setString(1, userEmail);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                notifications.add(rs.getString("message"));
+            }
+        }
+        return notifications;
+    }
+
+    public void markNotificationsAsSeen(String userEmail) throws SQLException {
+        String updateNotifSql = "UPDATE Notifications SET seen = 1 WHERE user_email = ?";
+        try (Connection con = getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(updateNotifSql)) {
+            preparedStatement.setString(1, userEmail);
+            preparedStatement.executeUpdate();
         }
     }
 

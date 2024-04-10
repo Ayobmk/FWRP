@@ -27,6 +27,14 @@ public class CustomerStatusServlet extends HttpServlet {
             // Fetch orders by the user's email
             List<Order> userOrders = itemsDAO.fetchOrdersByUserEmail(userEmail);
             request.setAttribute("userOrders", userOrders);
+            
+            // Fetch notifications for the user
+            List<String> notifications = itemsDAO.fetchNotificationsForUser(userEmail);
+            request.setAttribute("notifications", notifications);
+            
+            // Mark notifications as seen, logically this is done before the forward to reflect in subsequent requests
+            itemsDAO.markNotificationsAsSeen(userEmail);
+
             RequestDispatcher dispatcher = request.getRequestDispatcher("customerStatus.jsp");
             dispatcher.forward(request, response);
         } catch (SQLException e) {
