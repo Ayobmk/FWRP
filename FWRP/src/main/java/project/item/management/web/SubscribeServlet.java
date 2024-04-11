@@ -19,6 +19,7 @@ import project.item.management.dao.ItemsDAO;
 
 /**
  * Servlet implementation class SubscribeServlet
+ * This servlet handles user subscription to receive updates.
  */
 @WebServlet("/SubscribeServlet")
 public class SubscribeServlet extends HttpServlet {

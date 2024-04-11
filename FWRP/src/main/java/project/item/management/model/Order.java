@@ -1,5 +1,8 @@
 package project.item.management.model;
 
+/**
+ * Represents an order for an item.
+ */
 public class Order {
     private int id;
     private byte[] image;
@@ -15,6 +18,9 @@ public class Order {
     private String userType;
     private String base64Image;
 	
+    /**
+     * Constructs an Order object with default values.
+     */
     public Order() {
     }
     
@@ -107,10 +113,14 @@ public class Order {
 		this.userType = userType;
 	}
 
-	   public String getBase64Image() {
-	        return base64Image;
+	public String getBase64Image() {
+	    return base64Image;
 	    }
 
+	    /**
+	     * Sets the base64 encoded string of the image.
+	     * @param base64Image the base64 encoded string of the image
+	     */
 	    public void setBase64Image(String base64Image) {
 	        this.base64Image = base64Image;
 	    }

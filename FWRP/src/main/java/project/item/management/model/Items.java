@@ -3,6 +3,14 @@ package project.item.management.model;
 //import java.time.LocalDate;
 //import java.time.format.DateTimeFormatter;
 
+/**
+ * Represents an item within the item management system. This class encapsulates
+ * all details associated with an item, including its identifier, image, name,
+ * type, description, reason for listing, expiration date, price, and surplus status.
+ * Additionally, it provides a mechanism to convert the item's image to a Base64-encoded
+ * string for easier handling in contexts where binary data cannot be directly used
+ * (e.g., embedding in JSON responses or HTML pages).
+ */
 public class Items {
     private int id;
     private byte[] image; 

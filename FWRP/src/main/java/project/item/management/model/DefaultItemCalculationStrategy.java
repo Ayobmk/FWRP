@@ -3,6 +3,11 @@ package project.item.management.model;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Implements the {@link ItemCalculationStrategy} interface to provide a default calculation strategy for
+ * discounted item prices and to determine if an item is near to its expiration date. The strategy applies
+ * a 50% discount for items that are either surplus or near to expire but not marked as donations.
+ */
 public class DefaultItemCalculationStrategy implements ItemCalculationStrategy{
 
 	@Override
