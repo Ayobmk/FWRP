@@ -25,6 +25,7 @@ import project.item.management.model.Items;
 
 /**
  * Servlet implementation class CustomerServlet
+ * This servlet handles requests from customers, displaying items for sale and managing calculations for discounted prices.
  */
 @WebServlet("/customer")
 public class CustomerServlet extends HttpServlet {
@@ -32,10 +33,22 @@ public class CustomerServlet extends HttpServlet {
     private ItemsDAOimp itemsDAO;
     private DefaultItemCalculationStrategy calculationStrategy = new DefaultItemCalculationStrategy();
 
+    /**
+     * Initializes the servlet by creating an instance of ItemsDAOimp.
+     */
     public CustomerServlet() {
         this.itemsDAO = new ItemsDAOimp(); // Initialize your ItemsDAO implementation
     }
 
+    
+    /**
+     * Handles HTTP GET requests.
+     * Retrieves items for sale, calculates discounted prices, and forwards the request to customer.jsp.
+     * @param request The HttpServletRequest object.
+     * @param response The HttpServletResponse object.
+     * @throws ServletException if a servlet-specific error occurs.
+     * @throws IOException if an I/O error occurs.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Fetch all items for sale
 		List<Items> allSellItems = itemsDAO.selectAllItem().stream()

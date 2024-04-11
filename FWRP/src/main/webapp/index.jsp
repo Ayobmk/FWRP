@@ -43,7 +43,7 @@ if(session.getAttribute("name")==null){
 	<!-- Title-->
 	<header class="containerHeader">
 		<div class="containerTitlePage">
-			<h1 class="title1">Welcome To Our Food Waste Reduction Platform </h1>
+			<h1 class="title1">Welcome To Our Food Waste Reduction Platform </h1><br><br><br>
 		</div>
 	</header>
 	

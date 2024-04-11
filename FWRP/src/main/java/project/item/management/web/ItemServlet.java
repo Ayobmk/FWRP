@@ -24,8 +24,10 @@ import project.item.management.model.Items;
 import project.item.management.model.Order;
 import project.item.management.model.DefaultItemCalculationStrategy;
 import project.item.management.model.ItemCalculationStrategy;
+
 /**
  * Servlet implementation class ItemServlet
+ * This servlet manages CRUD operations for items.
  */
 @WebServlet("/")
 @MultipartConfig

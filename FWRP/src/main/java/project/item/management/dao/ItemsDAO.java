@@ -6,6 +6,12 @@ import java.util.List;
 import project.item.management.model.Items;
 import project.item.management.model.Order;
 
+/**
+ * Defines the operations that can be performed on the items and orders within the item management system.
+ * This interface abstracts the data access layer, allowing for the manipulation of item and order data
+ * in a database. It includes methods for creating, reading, updating, and deleting (CRUD) items, as well
+ * as specific operations such as claiming items, buying items, and fetching orders.
+ */
 public interface ItemsDAO {
 	
 	boolean registerUser(String userName, String userEmail, String userPassword, String userPhone, String userType, String userProvince) throws SQLException;    

@@ -15,6 +15,12 @@ import project.item.management.dao.DAOFactory;
 import project.item.management.dao.ItemsDAO;
 import project.item.management.model.Items;
 
+
+/**
+ * Servlet implementation class CharityServlet
+ * This servlet retrieves items marked for donation from the database
+ * and forwards the request to charity.jsp for displaying them.
+ */
 @WebServlet("/charity")
 public class CharityServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -24,6 +30,9 @@ public class CharityServlet extends HttpServlet {
         this.itemsDAO = DAOFactory.getItemsDAO();
     }
 
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         

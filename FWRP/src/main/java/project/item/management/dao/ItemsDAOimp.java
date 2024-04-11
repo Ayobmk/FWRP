@@ -19,6 +19,9 @@ import project.item.management.model.Items;
 
 
 //this DAO class provides CRUD database operations for the table items in the database
+/**
+ * Implementation of the ItemsDAO interface providing CRUD operations for the 'items' table in the database.
+ */
 public class ItemsDAOimp implements ItemsDAO{
 	private String jdbcURL = "jdbc:mysql://localhost:3306/fwrp?useSSL=false";
 	private String jdbcUsername = "root";
